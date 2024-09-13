@@ -15,7 +15,7 @@ let proposalId: PublicKey;
 
 if (match) {
   proposalId = new PublicKey(match[1]);
-  console.log(proposalId.toBase58()); // Outputs: ApKpFDzwsjMEpW4zPNpmsHyPGfKrjaY6rA9HTLwV5a1w
+  console.log(proposalId.toBase58());
 } else {
   throw new Error("No proposal CA found");
 }
@@ -33,23 +33,18 @@ const program = new anchor.Program(
 
 export const getVotes = async () => {
   const account = await program.account.proposal.fetch(proposalId);
-  //for (const account of accounts) {
 
   const optionVotes = account.optionVotes.map((vote: anchor.BN) =>
     vote.toNumber()
   );
 
-  // Calculate voting results (converted to millions)
   const abstained = optionVotes[0] / 10 ** 6;
   const votedAgainst = optionVotes[1] / 10 ** 6;
   const votedFor = optionVotes[2] / 10 ** 6;
 
-  // Log the proposal link and voting breakdown
-
   console.log(`Abstained: ${abstained}`);
   console.log(`Voted For: ${votedFor}`);
   console.log(`Voted Against: ${votedAgainst}`);
-  //}
 };
 
 getVotes();
